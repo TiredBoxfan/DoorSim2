@@ -3,6 +3,9 @@
 	<head>
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta http-equiv="cache-control" content="no-cache, no-store, must-revalidate">
+    	<meta http-equiv="pragma" content="no-cache">
+    	<meta http-equiv="expires" content="0">
 		<title>Door Simulator 2</title>
 		<link rel="stylesheet" href="style.css" />
 	</head>
@@ -20,10 +23,10 @@
 				   class="command-input"
 				   autofocus
 				   placeholder="Enter a command...">
-			<button class="command-button" onclick="handleInput">
+			<button id="submit-button" class="command-button" onclick="handleInput">
 				Enter
 			</button>
 		</footer>
-		<script src="main.js?v=<?= filemtime('mycss.css') ?>"></script>
+		<script src="main.js?v=<?=filemtime('main.js')?>"></script>
 	</body>
 </html>

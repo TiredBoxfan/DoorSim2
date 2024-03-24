@@ -4,8 +4,16 @@ document.getElementById('input').addEventListener('keydown', function (event) {
 	}
 });
 
-function output(text) {
-	document.getElementById('output').innerHTML += `<p>${text}</p>`;
+function output() {
+	var textbox = document.getElementById('output');
+	textbox.innerHTML += '<p>';//`<p>${text}</p>`;
+	for (var i = 0; i < arguments.length; i++)
+	{
+		if (i !== 0)
+			textbox.innerHTML += '<br>';
+		textbox.innerHTML += arguments[i];
+	}
+	textbox.innerHTML += '</p>'
 	// Snap view to bottom.
 	var field = document.getElementById('game-container');
 	field.scrollTop = field.scrollHeight;
@@ -26,7 +34,22 @@ function handleInput() {
 	output(` > ${rawInput} Set[${new Array(...args).join('|')}]`);
 }
 
-async function loadStrings() {
+output('A simple','test','of this multiline')
+output('And another','one')
+
+/*function toggleElement(name, state) {
+	var obj = document.getElementById(name);
+	if (obj) {
+		obj.disabled = !state;
+	}
+}
+
+function inputToggle(state) {
+	toggleElement('input', state);
+	toggleElement('submit-button', state);
+}*/
+
+/*async function loadStrings() {
 	response = await fetch('./strings.json')
 		.then(response => {
 			if (!response.ok) {
@@ -36,10 +59,19 @@ async function loadStrings() {
 		})
 		.then(data => {
 			output(data['intro'])
+			text = data;
+			startGame();
 		})
 		.catch(error => {
+			output('<font color=red>Error while loading text strings. :(</font>')
 			output(`<font color=red>${error}</font>`);
 		});
 }
 
-loadStrings();
+function startGame() {
+	inputToggle(true);
+}
+
+var text = null;
+inputToggle(false);
+loadStrings();*/
