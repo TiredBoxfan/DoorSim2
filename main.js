@@ -34,7 +34,7 @@ function readJson() {
 			return response.json();
 		})
 		.then(data => {
-			//output(data);
+			output(data);
 		})
 		.catch(error => {
 			output('<font color=red>Could not load strings.json</font>' + error);
