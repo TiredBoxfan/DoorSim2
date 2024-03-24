@@ -35,10 +35,10 @@ async function loadStrings() {
 			return response.json();
 		})
 		.then(data => {
-			output(data['debug'])
+			output(data['intro'])
 		})
 		.catch(error => {
-			output("Error: "+error);
+			output(`<font color=red>${error}</font>`);
 		});
 }
 
