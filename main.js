@@ -26,7 +26,7 @@ function handleInput() {
 	output(` > ${rawInput} Set[${new Array(...args).join('|')}]`);
 }
 
-function readJson() {
+/*function readJson() {
 	return fetch('./strings.json')
 		.then(response => {
 			if (!response.ok)
@@ -39,7 +39,21 @@ function readJson() {
 		.catch(error => {
 			output('<font color=red>Could not load strings.json</font>' + error);
 		});
-}
+}*/
+
+fetch('./strings.json')
+	.then(response => {
+		if (!response.ok) {
+			throw new Error('Network response was not ok');
+		}
+		return response.json();
+	})
+	.then(data => {
+		output("Success");
+	})
+	.catch(error => {
+		output("Error: "+error);
+	});
 
 const symCenter = Symbol("Center");
 const symNorth = Symbol("North");
@@ -50,8 +64,6 @@ const symUp = Symbol("Up");
 const symDown = Symbol("Down");
 
 output("Loaded");
-
-readJson();
 
 output('Welcome to Door Simulator II: Before the Threshold!');
 output('You are standing in the center of a small, decently lit room. In front of you is a door. The door is a standard \'pull to open\' model featuring a rotatable knob.');
