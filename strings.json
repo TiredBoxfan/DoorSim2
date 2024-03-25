@@ -1,3 +1,9 @@
 {
-	"intro": "There is a door.\nNew Line!"
+	"commands": {
+		"open": "cmd.open",
+		"close": "cmd.close",
+		"pull": "cmd.pull",
+		"push": "cmd.push",
+		"put": "cmd.put"
+	}
 }
