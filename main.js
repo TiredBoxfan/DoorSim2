@@ -148,9 +148,14 @@ function handleInput() {
 		} else {
 			output('You cannot put that there.')
 		}
-	} else if(args.has('tighten') || args.has('strengthen') || args.has('fasten')) {
+	} else if(args.has('tighten') || args.has('strengthen') || args.has('fasten') || args.has('clench')) {
 		if (argsGrip()) {
-			actFirmKnob()
+			if (isHandOnKnob()) {
+				actFirmKnob()
+			} else {
+				output('You clench your hands into a fist.')
+				tightGrip = true
+			}
 		} else {
 			output('You cannot tighten that.')
 		}
@@ -218,6 +223,17 @@ function handleInput() {
 	} else if(args.has('open')) {
 		if (args.has('door')) {
 			openDoor()
+		} else if(args.has('hand')) {
+			if (isHandOnKnob()) {
+				output('You open your hand, releasing the doorknob in the process.')
+				handState = handNone
+				tightGrip = false
+			} else if(tightGrip) {
+				output('You open your fist.')
+				tightGrip = false
+			} else {
+				output('Your hand is already open.')
+			}
 		} else {
 			output('You cannot open that.')
 		}
@@ -237,6 +253,28 @@ function handleInput() {
 		} else {
 			output('You cannot pull that.')
 		}
+	} else if(args.has('look')) {
+		if (args.has('door')) {
+			output('It\'s a door.')
+		} else if(argsKnob()) {
+			output('It\'s a doorknob.')
+		} else if(args.has('hand')) {
+			if (isHandOnKnob()) {
+				if (tightGrip) {
+					output('Your hand is firmly on the doorknob.')
+				} else {
+					output('Your hand is resting on the knob')
+				}
+			} else {
+				if (tightGrip) {
+					output('Your hand is clenched into a fist.')
+				} else {
+					output('You know it like the back of your hand.')
+				}
+			}
+		} else {
+			output('You cannot look at that.')
+		}
 	} else {
 		output('I do not recognize that command.')
 	}
@@ -252,6 +290,9 @@ const handKnobRight = Symbol('Hand Knob Right')
 // Position symbols.
 const posClosetNear = Symbol('Closet Near')
 const posClosetFar = Symbol('Closet Far')
+
+// Direction symbols.
+
 
 // Player states.
 var handState = handNone
