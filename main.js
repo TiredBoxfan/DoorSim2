@@ -39,7 +39,7 @@ function handleInput() {
 	// Get input.
 	var field = document.getElementById('input')
 	var rawInput = field.value
-	var args = new Set(rawInput.trim().toLowerCase().split(/\s+/).filter(w => w !== '').map(w => w.replace(/[^a-zA-Z0-9]/g, '')))
+	var args = new Set(rawInput.trim().toLowerCase().split(/\s+/).map(w => w.replace(/[^a-zA-Z0-9]/g, '')).filter(w => w !== ''))
 
 	// Clear field.
 	field.value = ''
@@ -80,7 +80,7 @@ function handleInput() {
 				if (alreadyOnKnob) {
 					output('Your hand is already on the doorknob.')
 				} else {
-					output('You gently grab the doorknob.')
+					output('You gently place your hand on the doorknob.')
 					handState = handKnob
 					tightGrip = false
 				}
@@ -127,7 +127,7 @@ function handleInput() {
 					handState = handNone
 					tightGrip = false
 				} else {
-					output('You did it! Good job!')
+					output('The door is open! You did it! Good job!')
 					inputToggle(false)
 				}
 			} else {
@@ -161,8 +161,12 @@ function handleInput() {
 		}
 	} else if(args.has('loosen') || args.has('relax')) {
 		if (argsGrip()) {
-			output('You loosen your grip.')
-			tightGrip = false
+			if (tightGrip) {
+				output('You loosen your grip.')
+				tightGrip = false
+			} else {
+				output('Your hand is already relaxed.')
+			}
 		} else {
 			output('You cannot loosen that.')
 		}
@@ -197,6 +201,32 @@ function handleInput() {
 			} else {
 				output('Alas, you cannot turn the knob with your mind.')
 			}
+		}
+	} else if(args.has('look')) {
+		if (args.has('door')) {
+			output('It\'s a wooden door.')
+		} else if(argsKnob()) {
+			if (isHandOnKnob()) {
+				output('You can\'t get a good look at the knob with your hand in the way.')
+			} else {
+				output('It\'s a round doorknob.')
+			}
+		} else if(args.has('hand')) {
+			if (isHandOnKnob()) {
+				if (tightGrip) {
+					output('Your hand is firmly on the doorknob.')
+				} else {
+					output('Your hand is resting on the knob')
+				}
+			} else {
+				if (tightGrip) {
+					output('Your hand is clenched into a fist.')
+				} else {
+					output('You know it like the back of your hand.')
+				}
+			}
+		} else {
+			output('You cannot look at that.')
 		}
 	} else if(args.has('step') || args.has('walk') || args.has('move')) {
 		if (args.has('forward') || args.has('forwards')) {
@@ -253,28 +283,12 @@ function handleInput() {
 		} else {
 			output('You cannot pull that.')
 		}
-	} else if(args.has('look')) {
-		if (args.has('door')) {
-			output('It\'s a door.')
-		} else if(argsKnob()) {
-			output('It\'s a doorknob.')
-		} else if(args.has('hand')) {
-			if (isHandOnKnob()) {
-				if (tightGrip) {
-					output('Your hand is firmly on the doorknob.')
-				} else {
-					output('Your hand is resting on the knob')
-				}
-			} else {
-				if (tightGrip) {
-					output('Your hand is clenched into a fist.')
-				} else {
-					output('You know it like the back of your hand.')
-				}
-			}
-		} else {
-			output('You cannot look at that.')
-		}
+	} else if(args.has('help')) {
+		output('Fair hero, your most noble quest is to open doors.',
+			'Your can accomplish this by typing in actions. For instance:',
+			'Perhaps you could [look] at things such as the [door].',
+			'You might even decide to [put] your [hand] on the [knob]!',
+			'Take it a [step] at a time and your quest will be won!')
 	} else {
 		output('I do not recognize that command.')
 	}
@@ -299,4 +313,7 @@ var handState = handNone
 var tightGrip = false
 var position = posClosetNear
 
+output('Welcome to Door Simulator II: Behind the Threshold!')
+output('This is the tale of a hero and a door.')
+output('If you find yourself stuck, you can always request for [help]!')
 output('You stand in a small room, a closet really. In front of you there is a door. A light is above you.')
