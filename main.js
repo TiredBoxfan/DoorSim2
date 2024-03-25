@@ -100,13 +100,8 @@ function handleInput() {
 	} else if (args.has('grab') || args.has('grasp') || args.has('hold')) {
 		doGrab()
 	} else if (args.has('turn')) {
-		if (hasKnobSynonym()) {
+		if (hasKnobSynonym() || args.has('hand')) {
 			doKnobTurn()
-		} else if(args.has('hand')) {
-			if (handState != handKnob)
-				output('Alas you accomplish little.')
-			else
-				doKnobTurn()
 		} else {
 			output('You turn yourself around 360 degrees.')
 		}
