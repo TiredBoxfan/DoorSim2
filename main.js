@@ -116,6 +116,17 @@ function handleInput() {
 			output('You attempt to turn the knob but your lack of commitment to any particular direction prevents your progress.')
 		}
 	}
+
+	function actStepBack() {
+		if (position == posClosetNear) {
+			output('You take a step backwards.')
+			position = posClosetFar
+		} else if(position == posClosetFar) {
+			output('The wall behind you prevents this action.')
+		} else {
+			output('ERROR: Unhandled location.')
+		}
+	}
 	
 	function openDoor() {
 		if (isHandOnKnob()) {
@@ -140,7 +151,18 @@ function handleInput() {
 	}
 
 	// Handle args.
-	if (args.has('grab') || args.has('grasp') || args.has('hold')) {
+	// Notes:
+	// - Knob should always come before Door in if-else trees. So "door knob" gets a hit for knob, not door.
+	if(args.has('help')) {
+		output('Brave hero, your most noble quest is to open doors.',
+			'Your can accomplish this by typing in actions.',
+			'These actions should be short and sweet, around 2 to 5 words',
+			'Perhaps you could [look] at things such as the [door].',
+			'You might even decide to [put] your [hand] on the [knob]!',
+			'Take it a [step] at a time and your quest will be won!')
+	} else if (args.has('and') || args.has('then') || args.has('while')) {
+		output('Woah there, partner! One thing at a time, okay?')
+	} else if (args.has('grab') || args.has('grasp') || args.has('hold')) {
 		actGrab()
 	} else if(args.has('put') || args.has('place')) {
 		if (args.has('hand')) {
@@ -203,14 +225,14 @@ function handleInput() {
 			}
 		}
 	} else if(args.has('look')) {
-		if (args.has('door')) {
-			output('It\'s a wooden door.')
-		} else if(argsKnob()) {
+		if (argsKnob()) {
 			if (isHandOnKnob()) {
 				output('You can\'t get a good look at the knob with your hand in the way.')
 			} else {
 				output('It\'s a round doorknob.')
 			}
+		} else if (args.has('door')) {
+			output('It\'s a wooden door.')
 		} else if(args.has('hand')) {
 			if (isHandOnKnob()) {
 				if (tightGrip) {
@@ -239,17 +261,12 @@ function handleInput() {
 				output('ERROR: Unhandled location.')
 			}
 		} else if (args.has('backward') || args.has('backwards') || args.has('back')) {
-			if (position == posClosetNear) {
-				output('You take a step backwards.')
-				position = posClosetFar
-			} else if(position == posClosetFar) {
-				output('The wall behind you prevents this action.')
-			} else {
-				output('ERROR: Unhandled location.')
-			}
+			actStepBack()
 		} else {
 			output('You cannot step there.')
 		}
+	} else if(args.has('back') && args.has('up')) { // Probably fine, but compound would be better.
+		actStepBack()
 	} else if(args.has('open')) {
 		if (args.has('door')) {
 			openDoor()
@@ -267,6 +284,12 @@ function handleInput() {
 		} else {
 			output('You cannot open that.')
 		}
+	} else if (args.has('push')) {
+		if (argsKnob() || args.has('door')) {
+			output('Pulling on a push door won\'t get you very far...')
+		} else {
+			output('You cannot push that.')
+		}
 	} else if(args.has('pull')) {
 		if (args.has('door') || argsKnob()) {
 			openDoor()
@@ -283,12 +306,18 @@ function handleInput() {
 		} else {
 			output('You cannot pull that.')
 		}
-	} else if(args.has('help')) {
-		output('Fair hero, your most noble quest is to open doors.',
-			'Your can accomplish this by typing in actions. For instance:',
-			'Perhaps you could [look] at things such as the [door].',
-			'You might even decide to [put] your [hand] on the [knob]!',
-			'Take it a [step] at a time and your quest will be won!')
+	} else if(args.has('kick')) {
+		if (args.has('door')) {
+			output('You kick the door.')
+		} else {
+			output('You cannot kick that.')
+		}
+	} else if(args.has('hit') || args.has('punch')) {
+		if (args.has('door')) {
+			output('You punch the door')
+		} else {
+			output('You cannot hit that.')
+		}
 	} else {
 		output('I do not recognize that command.')
 	}
