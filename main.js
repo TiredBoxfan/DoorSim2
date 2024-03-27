@@ -39,7 +39,17 @@ function handleInput() {
 	// Get input.
 	var field = document.getElementById('input')
 	var rawInput = field.value
-	var args = new Set(rawInput.trim().toLowerCase().split(/\s+/).map(w => w.replace(/[^a-zA-Z0-9]/g, '')).filter(w => w !== ''))
+
+	// Calculate args.
+	// Ensure text is completely lowercase.
+	var args = rawInput.trim().toLowerCase()
+	// Remove non-alphanumeric and non-whitespace characters.
+	args = args.replace(/[^a-z0-9\s]/g, '')
+	// Merge important key phrases.
+	//args = args.replace(/left\shand/g, 'lefthand')
+	//args = args.replace(/right\shand/g, 'righthand')
+	// Split args by whitespace and convert to set.
+	args = new Set(args.split(/\s+/).filter(w => w != ''))
 
 	// Clear field.
 	field.value = ''
@@ -318,6 +328,8 @@ function handleInput() {
 		} else {
 			output('You cannot hit that.')
 		}
+	} else if (args.has('knock') || args.has('bang')) {
+		output('You try knocking on the door but after getting no response, you conclude that no one is coming to your rescue. On the bright side, knocking on wood is supposed to prevent jinxes so you\'ve got that going for you now.')	
 	} else {
 		output('I do not recognize that command.')
 	}
@@ -344,5 +356,5 @@ var position = posClosetNear
 
 output('Welcome to Door Simulator II: Behind the Threshold!')
 output('This is the tale of a hero and a door.')
-output('If you find yourself stuck, you can always request for [help]!')
+output('You can use the [help] command to get more information on how to play!')
 output('You stand in a small room, a closet really. In front of you there is a door. A light is above you.')
