@@ -12,7 +12,7 @@ function toggleElement(name, state) {
 	}
 }
 
-function inputToggle(state) {
+function toggleInput(state) {
 	toggleElement('input', state);
 	toggleElement('submit-button', state);
 }
@@ -23,8 +23,7 @@ function output() {
 	// Show text on screen.
 	var textbox = document.getElementById('output')
 	textbox.innerHTML += '<p>'
-	for (let i = 0; i < arguments.length; i++)
-	{
+	for (let i = 0; i < arguments.length; i++) {
 		if (i !== 0)
 			textbox.innerHTML += '<br>'
 		textbox.innerHTML += arguments[i]
@@ -33,6 +32,58 @@ function output() {
 	// Snap view to bottom.
 	var field = document.getElementById('game-container')
 	field.scrollTop = field.scrollHeight
+}
+
+function outputSlow() {
+	// Disable input.
+	toggleInput(false)
+
+	// Declare variables.
+	var textbox = document.getElementById('output')
+	var delay
+	var i = 0
+	var j = 0
+	var args = arguments
+	var onComplete = null
+
+	// Determine delay.
+	if (args.length >= 1 && typeof args[i] === "number") {
+		delay = args[i]
+		i = 1
+	} else {
+		delay = 50 // Default value.
+	}
+
+	// Check if next parameter is an onComplete function.
+	if (args.length >= i+1 && typeof args[i] !== "string") {
+		onComplete = args[i]
+		i += 1
+	}
+
+	// Nested function that types a letter at a time.
+	function typeLetter() {
+		textbox.innerHTML += args[i][j]
+		j += 1
+		// Increment character.
+		if (j >= args[i].length) {
+			i += 1
+			j = 0
+			textbox.innerHTML += '<br>'
+		}
+		if (i < args.length) // Increment line.
+			setTimeout(typeLetter, delay)
+		else { // Done, re-enable input.
+			textbox.innerHTML += '</p>'
+			toggleInput(true)
+			// Call onComplete.
+			if (onComplete !== null)
+				onComplete()
+		}
+	}
+
+	// Run code.
+	textbox.innerHTML += '<p>'
+	typeLetter()
 }
 
 function handleInput() {
@@ -149,7 +200,7 @@ function handleInput() {
 					tightGrip = false
 				} else {
 					output('The door is open! You did it! Good job!')
-					inputToggle(false)
+					toggleInput(false)
 				}
 			} else {
 				output('You lose your weak grip on the knob.')
@@ -173,8 +224,7 @@ function handleInput() {
 			'Take it a [step] at a time and your quest will be won!')
 	} else if (args.has('chant') || args.has('intone') || args.has('recite')) {
 		if (args.has('reset') || args.has('restart')) {
-			output('The world warps around you...')
-			startLevel()
+			outputSlow(startLevel, 'The world warps around you...')
 		} else {
 			output('But your call went unanswered...')
 		}
