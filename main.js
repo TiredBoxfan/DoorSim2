@@ -169,7 +169,15 @@ function handleInput() {
 			'These actions should be short and sweet, around 2 to 5 words',
 			'Perhaps you could [look] at things such as the [door].',
 			'You might even decide to [put] your [hand] on the [knob]!',
+			'For a fresh start, you may [chant] the phrase [reset].',
 			'Take it a [step] at a time and your quest will be won!')
+	} else if (args.has('chant') || args.has('intone') || args.has('recite')) {
+		if (args.has('reset') || args.has('restart')) {
+			output('The world warps around you...')
+			startLevel()
+		} else {
+			output('But your call went unanswered...')
+		}
 	} else if (args.has('and') || args.has('then') || args.has('while')) {
 		output('Woah there, partner! One thing at a time, okay?')
 	} else if (args.has('grab') || args.has('grasp') || args.has('hold')) {
@@ -335,6 +343,20 @@ function handleInput() {
 	}
 }
 
+function resetVariables() {
+	handState = handNone
+	tightGrip = false
+	position = posClosetNear
+}
+
+function startLevel() { // TODO: Add a variable that determines which level to laod.
+	resetVariables()
+	output('Welcome to Door Simulator II: Behind the Threshold!')
+	output('This is the tale of a hero and a door.')
+	output('You can use the [help] command to get more information on how to play!')
+	output('You stand in a small room, a closet really. In front of you there is a door. A light is above you.')
+}
+
 // Hand symbols.
 const handNone = Symbol('Hand None')
 const handDoor = Symbol('Hand Door')
@@ -354,7 +376,4 @@ var handState = handNone
 var tightGrip = false
 var position = posClosetNear
 
-output('Welcome to Door Simulator II: Behind the Threshold!')
-output('This is the tale of a hero and a door.')
-output('You can use the [help] command to get more information on how to play!')
-output('You stand in a small room, a closet really. In front of you there is a door. A light is above you.')
+startLevel()
