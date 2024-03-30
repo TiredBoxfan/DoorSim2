@@ -47,6 +47,8 @@ function outputSlow() {
 	var j = 0
 	var args = arguments
 	var onComplete = null
+	var origin = textbox.innerHTML
+	var text = ''
 
 	// Determine delay.
 	if (args.length >= 1 && typeof args[i] === "number") {
@@ -64,29 +66,43 @@ function outputSlow() {
 
 	// Nested function that types a letter at a time.
 	function typeLetter() {
-		textbox.innerHTML += args[i][j]
-		j += 1
+		var ch = args[i][j]
+		if (ch === '<') { // Complete tags instantly.
+			while (j < args[i].length && args[i][j] !== '>') {
+				text += args[i][j]
+				j += 1
+			}
+		} else {
+			text += args[i][j]
+			j += 1
+		}
 		// Increment character.
 		if (j >= args[i].length) {
 			i += 1
 			j = 0
-			textbox.innerHTML += '<br>'
+			text += '<br>'
 		}
 		if (i < args.length) { // Increment line.
-			setTimeout(typeLetter, delay)
+			textbox.innerHTML = origin + text
+			setTimeout(typeLetter, ch === '.' ? delay*10 : delay)
 			field.scrollTop = field.scrollHeight
 		}
 		else { // Done, re-enable input.
-			textbox.innerHTML += '</p>'
-			toggleInput(true)
-			// Call onComplete.
-			if (onComplete !== null)
-				onComplete()
+			text += '</p>'
+			textbox.innerHTML = origin + text
+			setTimeout(resume, ch === '.' ? delay*10 : delay)
 		}
 	}
 
+	function resume() {
+		toggleInput(true)
+		// Call onComplete.
+		if (onComplete !== null)
+			onComplete()
+	}
+
 	// Run code.
-	textbox.innerHTML += '<p>'
+	text += '<p>'
 	field.scrollTop = field.scrollHeight
 	typeLetter()
 }
@@ -229,7 +245,7 @@ function handleInput() {
 			'Take it a [step] at a time and your quest will be won!')
 	} else if (args.has('chant') || args.has('intone') || args.has('recite')) {
 		if (args.has('reset') || args.has('restart')) {
-			outputSlow(startLevel, 'The world warps around you...')
+			outputSlow(startLevel, '<font color=magenta>The world warps around you...')
 		} else {
 			output('But your call went unanswered...')
 		}
@@ -406,7 +422,7 @@ function resetVariables() {
 
 function startLevel() { // TODO: Add a variable that determines which level to laod.
 	resetVariables()
-	output('Welcome to Door Simulator II: Behind the Threshold!')
+	output('<font color=lime>Welcome to Door Simulator II: Behind the Threshold!')
 	output('This is the tale of a hero and a door.')
 	output('You can use the [help] command to get more information on how to play!')
 	output('You stand in a small room, a closet really. In front of you there is a door. A light is above you.')
