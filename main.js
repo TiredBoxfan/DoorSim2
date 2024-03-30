@@ -22,13 +22,14 @@ function toggleInput(state) {
 function output() {
 	// Show text on screen.
 	var textbox = document.getElementById('output')
-	textbox.innerHTML += '<p>'
+	var text = '<p>' //'<p style="text-align:center;">'
 	for (let i = 0; i < arguments.length; i++) {
 		if (i !== 0)
-			textbox.innerHTML += '<br>'
-		textbox.innerHTML += arguments[i]
+			text += '<br>'
+		text += arguments[i]
 	}
-	textbox.innerHTML += '</p>'
+	text += '</p>'
+	textbox.innerHTML += text
 	// Snap view to bottom.
 	var field = document.getElementById('game-container')
 	field.scrollTop = field.scrollHeight
