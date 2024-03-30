@@ -40,6 +40,7 @@ function outputSlow() {
 
 	// Declare variables.
 	var textbox = document.getElementById('output')
+	var field = document.getElementById('game-container')
 	var delay
 	var i = 0
 	var j = 0
@@ -70,8 +71,10 @@ function outputSlow() {
 			j = 0
 			textbox.innerHTML += '<br>'
 		}
-		if (i < args.length) // Increment line.
+		if (i < args.length) { // Increment line.
 			setTimeout(typeLetter, delay)
+			field.scrollTop = field.scrollHeight
+		}
 		else { // Done, re-enable input.
 			textbox.innerHTML += '</p>'
 			toggleInput(true)
@@ -83,6 +86,7 @@ function outputSlow() {
 
 	// Run code.
 	textbox.innerHTML += '<p>'
+	field.scrollTop = field.scrollHeight
 	typeLetter()
 }
 
