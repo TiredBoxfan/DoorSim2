@@ -107,6 +107,11 @@ function outputSlow() {
 	typeLetter()
 }
 
+function clearOutput() {
+	var textbox = document.getElementById('output')
+	textbox.innerHTML = ''
+}
+
 function handleInput() {
 	// Get input.
 	var field = document.getElementById('input')
@@ -129,7 +134,7 @@ function handleInput() {
 	if (args.size == 0)
 		return
 	// Display input.
-	output(`<i> \> ${rawInput}</i>`)
+	output(`<font color=lightgray><i> \> ${rawInput}</i></font>`)
 
 	// Action functions.
 
@@ -246,6 +251,8 @@ function handleInput() {
 	} else if (args.has('chant') || args.has('intone') || args.has('recite')) {
 		if (args.has('reset') || args.has('restart')) {
 			outputSlow(startLevel, '<font color=magenta>The world warps around you...')
+		} else if(args.has('clear') || args.has('expunge')) {
+			outputSlow(clearOutput, '<font color=magenta>The record begins to expunge...')
 		} else {
 			output('But your call went unanswered...')
 		}
