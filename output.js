@@ -51,10 +51,9 @@ function outputTypewrite(onComplete, line) {
     let j = 0; // Character index of current line.
     let args = arguments; // Allow our arguments object to be reached by nested functions.
 
-    function finish() {
-        toggleInput(true);
-        if (typeof args[0] === 'function')
-            args[0]();
+    function complete() {
+        if (typeof onComplete === 'function')
+            onComplete();
     }
 
     function update() {
@@ -72,7 +71,7 @@ function outputTypewrite(onComplete, line) {
             setTimeout(typeNextLetter, _outputDelay);
         } else { // Done.
             p += '</p>'
-            setTimeout(finish, _outputDelay);
+            setTimeout(complete, _outputDelay);
         }
         // Update textbox.
         textbox.innerHTML = origin + p;
@@ -109,7 +108,6 @@ function outputTypewrite(onComplete, line) {
         update();
     }
 
-    toggleInput(false);
     typeNextLetter();
 }
 

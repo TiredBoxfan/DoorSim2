@@ -21,13 +21,41 @@ function toggleInput(state) {
 	toggleElement('submit-button', state);
 }
 
+/**
+ * Starts interpretation of the input field.
+ */
+function submitInput() {
+	// Get input.
+	toggleInput(false);
+	let field = document.getElementById('input');
+	let rawInput = field.value;
+	field.value = '';
+
+	// Calculate args.
+	// Normalize rawInput.
+	let args = rawInput.trim().toLowerCase();
+	// Ensure there is something process, otherwise end early.
+	if (args.length == 0)
+		return;
+	// Remove unwanted characters (including punctuation).
+	args = args.replace(/[^a-z0-9\s]/g, '');
+	
+	// Merge important key phrases where order matters.
+	args = args.replace(/left\shand/g, 'lefthand'); // EX: Turn left hand right -> Turn lefthand right
+	args = args.replace(/right\shand/g, 'righthand');
+
+	// Convert args to a set of keywords.
+	args = new Set(args.split(/s+/).filter(x => x != ''));
+
+	// Display input.
+	output(`<font color=lightgray><i> \> ${rawInput}</i></font>`);
+}
+
 /* BELOW: MODULE LEVEL CODE */
 
 // Add enter functionality to the input field.
 document.getElementById('input').addEventListener('keydown', function (event) {
 	if (event.key === 'Enter') {
-		// TODO: Handle input.
+		submitInput();
 	}
 })
-// Enable input, showing that this script was run successfully.
-toggleInput(true);
