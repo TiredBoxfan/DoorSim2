@@ -17,6 +17,8 @@ function toggleElement(id, state) {
 function toggleInput(state) {
     // Handle Input Field.
 	toggleElement('input', state);
+	if (state)
+		document.getElementById('input').focus();
     // Handle Input Submit Button.
 	toggleElement('submit-button', state);
 }
@@ -26,17 +28,17 @@ function toggleInput(state) {
  */
 function submitInput() {
 	// Get input.
-	toggleInput(false);
 	let field = document.getElementById('input');
-	let rawInput = field.value;
+	let rawInput = field.value.trim();
 	field.value = '';
 
 	// Calculate args.
 	// Normalize rawInput.
-	let args = rawInput.trim().toLowerCase();
+	let args = rawInput.toLowerCase();
 	// Ensure there is something process, otherwise end early.
 	if (args.length == 0)
 		return;
+	toggleInput(false); // Now that we are committed, disable input.
 	// Remove unwanted characters (including punctuation).
 	args = args.replace(/[^a-z0-9\s]/g, '');
 	
@@ -49,6 +51,9 @@ function submitInput() {
 
 	// Display input.
 	output(`<font color=lightgray><i> \> ${rawInput}</i></font>`);
+
+	// Handle command.
+	takeTurn(args);
 }
 
 /* BELOW: MODULE LEVEL CODE */

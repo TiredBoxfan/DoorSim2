@@ -1,0 +1,8 @@
+{
+	"cmd": {
+		"help": "cmd.help"
+	},
+	"out": {
+		"out.help": "HELP TEXT"
+	}
+}

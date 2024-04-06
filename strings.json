@@ -1,9 +1,0 @@
-{
-	"commands": {
-		"open": "cmd.open",
-		"close": "cmd.close",
-		"pull": "cmd.pull",
-		"push": "cmd.push",
-		"put": "cmd.put"
-	}
-}

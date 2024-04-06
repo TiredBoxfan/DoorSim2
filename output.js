@@ -1,8 +1,15 @@
 /**
+ * Clears the output
+ */
+function clearOutput() {
+    _textbox.innerHTML = ''
+}
+
+/**
  * Snaps the view of the container to the bottom.
  */
 function snapToBottom() {
-    container.scrollTop = container.scrollHeight;
+    _container.scrollTop = _container.scrollHeight;
 }
 
 /**
@@ -33,7 +40,7 @@ function output(line) {
     p += Array.prototype.join.call(arguments, '<br>');
     p += '</p>';
     // Append text.
-    textbox.innerHTML += p;
+    _textbox.innerHTML += p;
     snapToBottom();
 }
 
@@ -45,7 +52,7 @@ function output(line) {
  */
 function outputTypewrite(onComplete, line) {
     // Store a copy of the original text.
-    let origin = textbox.innerHTML;
+    let origin = _textbox.innerHTML;
     let p = `<p style="text-align:${_outputAlign}">`
     let i = 1; // Line index. Skip [0] since it is the onComplete.
     let j = 0; // Character index of current line.
@@ -74,7 +81,7 @@ function outputTypewrite(onComplete, line) {
             setTimeout(complete, _outputDelay);
         }
         // Update textbox.
-        textbox.innerHTML = origin + p;
+        _textbox.innerHTML = origin + p;
         snapToBottom();
     }
 
@@ -115,8 +122,8 @@ function outputTypewrite(onComplete, line) {
 
 const DEFAULT_DELAY = 100;
 
-var container = document.getElementById('game-container');
-var textbox = document.getElementById('output');
+var _container = document.getElementById('game-container');
+var _textbox = document.getElementById('output');
 
 var _outputAlign = 'left';
 var _outputDelay = DEFAULT_DELAY;

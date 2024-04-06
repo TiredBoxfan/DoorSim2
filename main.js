@@ -1,1 +1,1 @@
-toggleInput(true);
+loadLevel();
