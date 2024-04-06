@@ -51,13 +51,10 @@ function outputTypewrite(onComplete, line) {
     let j = 0; // Character index of current line.
     let args = arguments; // Allow our arguments object to be reached by nested functions.
 
-    let temp = document.getElementById('input');
-
     function finish() {
         toggleInput(true);
-        if (typeof arguments[0] === 'function') {
-            arguments[0]();
-        }
+        if (typeof args[0] === 'function')
+            args[0]();
     }
 
     function update() {
@@ -71,7 +68,7 @@ function outputTypewrite(onComplete, line) {
                 p += '<br>';
         }
         // Show update & finish.
-        if (i < args.length) { // Not done.
+        if (i < args.length) { // Still more to display.
             setTimeout(typeNextLetter, _outputDelay);
         } else { // Done.
             p += '</p>'
@@ -107,7 +104,8 @@ function outputTypewrite(onComplete, line) {
             }
         }
         // Add next character.
-        p += args[i][j];
+        if (args[i][j] !== '|')
+            p += args[i][j];
         update();
     }
 
@@ -117,13 +115,10 @@ function outputTypewrite(onComplete, line) {
 
 /* BELOW: MODULE LEVEL CODE */
 
-const DEFAULT_DELAY = 500;
+const DEFAULT_DELAY = 100;
 
 var container = document.getElementById('game-container');
 var textbox = document.getElementById('output');
 
 var _outputAlign = 'left';
 var _outputDelay = DEFAULT_DELAY;
-// TODO: Output action queue.
-output('This should still show.');
-outputTypewrite(null, 'Hello, World! <3','<font color=lime>Good to be back...</font>');
